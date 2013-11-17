@@ -1,4 +1,4 @@
 service.subtitles.bierdopje
 ===========================
 
-Subtitle service (add-on) for XBMC using Bierdopje.com
+Subtitle service (add-on) for XBMC v13 ("Gotham") using Bierdopje.com
