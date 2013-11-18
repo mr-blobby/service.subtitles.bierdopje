@@ -9,6 +9,7 @@
   <extension point="xbmc.subtitle.module"
              library="service.py" />
   <extension point="xbmc.addon.metadata">
+    <language>en nl</language>
     <summary lang="en">Search and download subtitles from Bierdopje.com.</summary>
     <summary lang="nl">Zoek en download ondertitels van Bierdopje.com.</summary>
     <description lang="en">Search and download subtitles from Bierdopje.com.
@@ -21,5 +22,8 @@ Werkt alleen voor tv shows en alleen voor Nederlandse en Engelse ondertitels.
 Ondersteuning: XBMC forum; subforum "Subtitle Add-ons".
 Broncode kan op github worden gevonden.
     </description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/forumdisplay.php?fid=143</forum>
+    <source>https://github.com/mr-blobby/service.subtitles.bierdopje</source>
   </extension>
 </addon>

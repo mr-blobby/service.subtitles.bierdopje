@@ -10,6 +10,7 @@ __addon__      = xbmcaddon.Addon()
 __scriptid__   = __addon__.getAddonInfo('id')
 __version__    = __addon__.getAddonInfo('version')
 __name__       = __addon__.getAddonInfo('name')
+__language__   = __addon__.getLocalizedString
 __profile__    = xbmc.translatePath( __addon__.getAddonInfo('profile') ).decode("utf-8")
 __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp') ).decode("utf-8")
 
@@ -57,7 +58,8 @@ def apicall(command, paramslist):
         if hasattr(e, 'reason'):
             log( __name__ ," failed to reach Bierdopje site, reason: '%s'." % e.reason )
             okdialog = xbmcgui.Dialog()
-            ok = okdialog.ok("Error", "Failed to reach Bierdopje: '%s'." % e.reason)
+            # ok = okdialog.ok("Error", "Failed to reach Bierdopje.com: '%s'." % e.reason)
+            ok = okdialog.ok(__language__(32001), __language__(32002) + ": '%s'." % e.reason)
         elif hasattr(e, 'code'):
             if e.code == 429: # HTTP Error 429 means: "Too Many Requests"
                 log( __name__ ," Bierdopje is overloaded (HTTP error 429: Too many requests). Reply from bierdopje:\n%s" % e.read() )
@@ -65,18 +67,21 @@ def apicall(command, paramslist):
             else:
                 log( __name__ ," Bierdopje site couldn't fulfill the request, HTTP code: '%s'." % e.code )
                 okdialog = xbmcgui.Dialog()
-                ok = okdialog.ok("Error", "Bierdopje couldn't fulfill the request, HTTP code: '%s'." % e.code)
+                # ok = okdialog.ok("Error", "Bierdopje couldn't fulfill the request, HTTP code: '%s'." % e.code)
+                ok = okdialog.ok(__language__(32001), __language__(32003) + ": '%s'." % e.code)
         else:
             log( __name__ ," unkown error while contacting Bierdopje site")
             okdialog = xbmcgui.Dialog()
-            ok = okdialog.ok("Error", "Unkown error while contacting Bierdopje.")
+            # ok = okdialog.ok("Error", "Unkown error while contacting Bierdopje.com")
+            ok = okdialog.ok(__language__(32001), __language__(32004))
     else:
         try:
             xml = XMLTree.parse(response)
             status = gettextelements(xml, "response/status")
         except:
             okdialog = xbmcgui.Dialog()
-            ok = okdialog.ok("Error", "unexpected response from Bierdopje.")
+            # ok = okdialog.ok("Error", "Unexpected response from Bierdopje.com")
+            ok = okdialog.ok(__language__(32001), __language__(32005))
             log( __name__ ," unexpected response from Bierdopje site.")
             return None
         if status == ["false"]:
@@ -142,7 +147,8 @@ def getshowid(showname):
                 file(showids_filename,'w').write(repr(showids))
                 return str(showid[0])
     okdialog = xbmcgui.Dialog()
-    ok = okdialog.ok("Error", "Failed to get a show id from Bierdopje for " + showname)
+    # ok = okdialog.ok("Error", "Failed to get a show id from Bierdopje for " + showname)
+    ok = okdialog.ok(__language__(32001), __language__(32006) + " " + showname)
     log( __name__ ," failed to get a show id for '%s'" % showname )
     return None
 
@@ -246,13 +252,16 @@ def search_subtitles( file_original_path, title, tvshow, year, season, episode, 
                 subtitles_list.sort(key=lambda x: [ x['language_name']], reverse = True)
             if ((dutch == 0) and (english == 0)):
                 okdialog = xbmcgui.Dialog()
-                ok = okdialog.ok("Error", "Bierdopje is only for Dutch and English subtitles.")
+                # ok = okdialog.ok("Error", "Bierdopje is only for Dutch and English subtitles")
+                ok = okdialog.ok(__language__(32001), __language__(32007))
     else:
         okdialog = xbmcgui.Dialog()
-        ok = okdialog.ok("Error", "Bierdopje only works with tv shows in library mode.")
+        # ok = okdialog.ok("Error", "Bierdopje only works with tv shows in library mode")
+        ok = okdialog.ok(__language__(32001), __language__(32008))
     if overloaded:
         okdialog = xbmcgui.Dialog()
-        ok = okdialog.ok("Error", "Bierdopje is currently overloaded (HTTP error 429: Too many requests).\nTry again later.")
+        # ok = okdialog.ok("Error", "Bierdopje is currently overloaded (HTTP error 429: Too many requests). Please try again later")
+        ok = okdialog.ok(__language__(32001), __language__(32009))
     if subtitles_list:
         for it in subtitles_list:
             listitem = xbmcgui.ListItem(label=it["language_name"],
@@ -275,7 +284,8 @@ def download_subtitles (link, filename):
         response = urllib2.urlopen(request)
     except:
         okdialog = xbmcgui.Dialog()
-        ok = okdialog.ok("Error", "Failed to contact Bierdopje site.")
+        # ok = okdialog.ok("Error", "Failed to contact Bierdopje.com")
+        ok = okdialog.ok(__language__(32001), __language__(32010))
         log( __name__ ," failed to get url '%s'" % link )
     else:
         log( __name__ ," saving subtitles to '%s'" % local_tmp_file )
@@ -285,7 +295,8 @@ def download_subtitles (link, filename):
             local_file_handle.close()
         except:
             okdialog = xbmcgui.Dialog()
-            ok = okdialog.ok("Error", "Failed to save subtitles.")
+            # ok = okdialog.ok("Error", "Failed to save subtitles")
+            ok = okdialog.ok(__language__(32001), __language__(32011))
             log( __name__ ," failed to save subtitles to '%s'" % local_tmp_file )
         else:
             if xbmcvfs.exists(local_tmp_file):
